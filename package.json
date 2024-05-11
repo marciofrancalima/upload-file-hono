@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "tsx watch src/index.ts"
+    "dev": "tsx watch src/index.ts",
+    "debug": "tsx src/index.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.574.0",
