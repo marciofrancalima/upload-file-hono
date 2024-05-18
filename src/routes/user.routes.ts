@@ -35,4 +35,10 @@ usersApp.get("/:userId", async (c) => {
   return c.json(user);
 });
 
+usersApp.post("/", async (c) => {
+  const { name, email } = await c.req.json();
+  const newUser = await createUser({ name, email });
+  return c.json({ id: newUser.id, name: newUser.name, email: newUser.email });
+});
+
 export default usersApp;
