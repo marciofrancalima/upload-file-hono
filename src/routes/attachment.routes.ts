@@ -21,35 +21,26 @@ attachmentApp.get("/:userId", async (c) => {
 });
 
 /**
- * Attachment (/attachment)
+ * Upload attachment (/attachment/:userId)
  */
 
 attachmentApp.post("/:userId", async (c) => {
   const body = await c.req.parseBody();
   const file = body["file"] as File;
-  const userId = c.req.param("userId");
+  const userId = parseInt(c.req.param("userId"));
 
-  const key = `${userId}/${body["category"]}/${Date.now()}-${file.name}`;
-
-  const upload = new Upload({
-    client,
-    params: {
-      Bucket: process.env.BUCKET_NAME,
-      Key: key,
-      Body: file,
-      ContentType: file.type,
-    },
-  });
-
-  await upload.done();
-
-  console.log("upload done", {
-    key,
+  const attachmentData: AttachmentUploadRequest = {
+    userId,
+    file,
     filename: file.name,
-    bucket: process.env.BUCKET_NAME,
-  });
+    category: String(body["category"]),
+    description: String(body["description"]),
+  };
 
-  return c.json({ filename: file.name, bucket: process.env.BUCKET_NAME, key });
+  const result = await uploadUserAttachment(attachmentData);
+
+  return c.json({ success: true, data: result });
+});
 });
 
 export default attachmentApp;
