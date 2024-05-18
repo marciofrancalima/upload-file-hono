@@ -22,8 +22,8 @@ const app = new Hono().use(errorMiddleware);
 app.use("/users/*", jwtMiddleware);
 app.use("/attachment/*", jwtMiddleware);
 
-app.route("/users", usersApp);
-app.route("/attachment", attachmentApp);
+app.route("/", usersApp);
+app.route("/", attachmentApp);
 
 /**
  * Public routes

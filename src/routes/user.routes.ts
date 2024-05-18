@@ -4,7 +4,7 @@ import { Hono } from "hono";
  * Routes for users App
  */
 
-const usersApp = new Hono();
+const usersApp = new Hono().basePath("/users");
 
 /**
  * Token validation (/users/*)

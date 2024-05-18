@@ -7,7 +7,7 @@ import client from "../config/aws-client";
  * Routes for attachment App
  */
 
-const attachmentApp = new Hono();
+const attachmentApp = new Hono().basePath("/attachment");
 
 /**
  * Attachment (/attachment)
