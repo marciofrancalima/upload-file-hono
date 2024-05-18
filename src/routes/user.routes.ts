@@ -29,9 +29,10 @@ usersApp.get("/", async (c) => {
  * Get user by id (/users/:userId)
  */
 
-usersApp.get("/:userId", (c) => {
-  const userData = c.get("jwtPayload");
-  return c.json(userData);
+usersApp.get("/:userId", async (c) => {
+  const userId = c.req.param("userId");
+  const user = await getUserById(+userId);
+  return c.json(user);
 });
 
 export default usersApp;
