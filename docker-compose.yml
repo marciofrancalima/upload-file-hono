@@ -24,8 +24,23 @@ services:
         aliases:
           - my-bucket.s3.us-east-1.amazonaws.com
 
+  postgres:
+    container_name: postgres_container
+    image: postgres:alpine3.19
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGDATA: /data/postgres
+    volumes:
+       - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+
 volumes:
   minio_data:
+  postgres:
 
 networks:
   default:
