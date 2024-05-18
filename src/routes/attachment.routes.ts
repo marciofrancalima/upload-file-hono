@@ -41,6 +41,12 @@ attachmentApp.post("/:userId", async (c) => {
 
   return c.json({ success: true, data: result });
 });
+
+attachmentApp.get(":userId/:attachmentId", async (c) => {
+  const { userId, attachmentId } = c.req.param();
+  const url = await downloadAttachment(+userId, +attachmentId);
+
+  return c.redirect(url);
 });
 
 export default attachmentApp;
