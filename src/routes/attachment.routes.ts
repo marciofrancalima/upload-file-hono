@@ -1,13 +1,24 @@
 import { Hono } from "hono";
-import { Upload } from "@aws-sdk/lib-storage";
 
-import client from "../config/aws-client";
+import {
+  AttachmentUploadRequest,
+  downloadAttachment,
+  listAttachments,
+  uploadUserAttachment,
+} from "../services/attachment.services";
 
 /**
  * Routes for attachment App
  */
 
 const attachmentApp = new Hono().basePath("/attachment");
+
+attachmentApp.get("/:userId", async (c) => {
+  const userId = parseInt(c.req.param("userId"));
+  const result = await listAttachments(userId);
+
+  return c.json({ success: true, data: result });
+});
 
 /**
  * Attachment (/attachment)
