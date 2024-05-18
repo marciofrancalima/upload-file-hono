@@ -61,6 +61,7 @@ This project utilizes the following technologies:
 - [Hono](https://hono.dev): Web application framework.
 - [MinIO](https://min.io): An open-source object storage server that is compatible with the Amazon S3 API.
 - [AWS SDK v3](https://aws.amazon.com/sdk-for-javascript/): The AWS SDK is used to interact with the MinIO storage AWS S3 simulator, which simulates the AWS S3 service.
+- [Drizzle ORM](https://orm.drizzle.team): A lightweight and intuitive ORM for TypeScript.
 
 ## Create a JWT token
 
