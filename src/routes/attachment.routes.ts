@@ -1,44 +1,52 @@
 import { Hono } from "hono";
-import { Upload } from "@aws-sdk/lib-storage";
 
-import client from "../config/aws-client";
+import {
+  AttachmentUploadRequest,
+  downloadAttachment,
+  listAttachments,
+  uploadUserAttachment,
+} from "../services/attachment.services";
 
 /**
  * Routes for attachment App
  */
 
-const attachmentApp = new Hono();
+const attachmentApp = new Hono().basePath("/attachment");
+
+attachmentApp.get("/:userId", async (c) => {
+  const userId = parseInt(c.req.param("userId"));
+  const result = await listAttachments(userId);
+
+  return c.json({ success: true, data: result });
+});
 
 /**
- * Attachment (/attachment)
+ * Upload attachment (/attachment/:userId)
  */
 
 attachmentApp.post("/:userId", async (c) => {
   const body = await c.req.parseBody();
   const file = body["file"] as File;
-  const userId = c.req.param("userId");
+  const userId = parseInt(c.req.param("userId"));
 
-  const key = `${userId}/${body["category"]}/${Date.now()}-${file.name}`;
-
-  const upload = new Upload({
-    client,
-    params: {
-      Bucket: process.env.BUCKET_NAME,
-      Key: key,
-      Body: file,
-      ContentType: file.type,
-    },
-  });
-
-  await upload.done();
-
-  console.log("upload done", {
-    key,
+  const attachmentData: AttachmentUploadRequest = {
+    userId,
+    file,
     filename: file.name,
-    bucket: process.env.BUCKET_NAME,
-  });
+    category: String(body["category"]),
+    description: String(body["description"]),
+  };
 
-  return c.json({ filename: file.name, bucket: process.env.BUCKET_NAME, key });
+  const result = await uploadUserAttachment(attachmentData);
+
+  return c.json({ success: true, data: result });
+});
+
+attachmentApp.get(":userId/:attachmentId", async (c) => {
+  const { userId, attachmentId } = c.req.param();
+  const url = await downloadAttachment(+userId, +attachmentId);
+
+  return c.redirect(url);
 });
 
 export default attachmentApp;

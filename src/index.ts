@@ -6,23 +6,24 @@ import { Hono } from "hono";
 import usersApp from "./routes/user.routes";
 import attachmentApp from "./routes/attachment.routes";
 
-import jwtConfig from "./config/jwt-config";
+import jwtMiddleware from "./middlewares/jwt.middleware";
+import { errorMiddleware } from "./middlewares/error.middleware";
 
 /**
  * Hono App
  */
 
-const app = new Hono();
+const app = new Hono().use(errorMiddleware);
 
 /**
  * Private routes
  */
 
-app.use("/users/*", jwtConfig);
-app.use("/attachment/*", jwtConfig);
+app.use("/users/*", jwtMiddleware);
+app.use("/attachment/*", jwtMiddleware);
 
-app.route("/users", usersApp);
-app.route("/attachment", attachmentApp);
+app.route("/", usersApp);
+app.route("/", attachmentApp);
 
 /**
  * Public routes

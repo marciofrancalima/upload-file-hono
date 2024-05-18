@@ -10,5 +10,10 @@
     ],
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx",
-  }
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*.ts"]
 }
